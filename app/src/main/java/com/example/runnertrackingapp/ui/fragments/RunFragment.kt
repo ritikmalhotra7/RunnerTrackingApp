@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.runnertrackingapp.R
 import com.example.runnertrackingapp.ui.viewModels.MainViewModel
 import com.example.runnertrackingapp.utils.Utils.REQUEST_CODE_LOCATION_PERMISSION
+import com.example.runnertrackingapp.utils.Utils.hasLocationPermissions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_run.*
 import pub.devrel.easypermissions.AppSettingsDialog
@@ -35,25 +36,6 @@ class RunFragment : Fragment(R.layout.fragment_run),EasyPermissions.PermissionCa
         }
         requestPermissions()
         super.onViewCreated(view, savedInstanceState)
-    }
-
-    private fun hasLocationPermissions(context: Context): Boolean{
-        var t :Boolean? = null
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            t = EasyPermissions.hasPermissions(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-        } else {
-            t = EasyPermissions.hasPermissions(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            )
-        }
-        return t!!
     }
 
     private fun requestPermissions() {
