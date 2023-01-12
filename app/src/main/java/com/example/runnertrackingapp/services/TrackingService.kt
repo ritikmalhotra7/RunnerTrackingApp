@@ -6,19 +6,15 @@ import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_MUTABLE
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Looper
-import android.util.Log
-import com.google.android.gms.location.LocationRequest
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
-import com.bumptech.glide.Priority
 import com.example.runnertrackingapp.R
 import com.example.runnertrackingapp.ui.activities.MainActivity
 import com.example.runnertrackingapp.utils.Utils
@@ -30,6 +26,7 @@ import com.example.runnertrackingapp.utils.Utils.LOCATION_UPDATE_INTERVAL
 import com.example.runnertrackingapp.utils.Utils.NOTIFICATION_ID
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
@@ -45,6 +42,7 @@ class TrackingService : LifecycleService() {
     companion object {
         //give info that we are tracking or not
         val isTracking = MutableLiveData<Boolean>()
+
         //having info about location points and
         val pathPoints = MutableLiveData<Polylines>()
     }
@@ -66,7 +64,7 @@ class TrackingService : LifecycleService() {
                     if (isFirstRun) {
                         isFirstRun = false
                         Timber.d("Started service")
-                    }else{
+                    } else {
                         Timber.d("Resumed service")
                     }
                     startForeGroundService()
@@ -121,9 +119,9 @@ class TrackingService : LifecycleService() {
 
     //updating location
     @SuppressLint("MissingPermission")
-    private fun updateLocationTracking(isTracking:Boolean){
-        if(isTracking){
-            if(Utils.hasLocationPermissions(this)){
+    private fun updateLocationTracking(isTracking: Boolean) {
+        if (isTracking) {
+            if (Utils.hasLocationPermissions(this)) {
                 //defining request to have location in an certain interval
                 val request = LocationRequest().apply {
                     interval = LOCATION_UPDATE_INTERVAL
@@ -131,9 +129,13 @@ class TrackingService : LifecycleService() {
                     priority = PRIORITY_HIGH_ACCURACY
                 }
                 //this will attach locationCallback
-                fusedLocationProviderClient.requestLocationUpdates(request,locationCallback, Looper.getMainLooper())
+                fusedLocationProviderClient.requestLocationUpdates(
+                    request,
+                    locationCallback,
+                    Looper.getMainLooper()
+                )
             }
-        }else{
+        } else {
             //this will detach callback
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         }
@@ -141,7 +143,7 @@ class TrackingService : LifecycleService() {
 
     //updating location according to isTracking
     private fun observeIsTracking() {
-        isTracking.observe(this){
+        isTracking.observe(this) {
             updateLocationTracking(it)
         }
     }
@@ -183,27 +185,15 @@ class TrackingService : LifecycleService() {
 
     private fun getMainActivityPendingIntent(): PendingIntent {
         //giving a pending intent what to do on click
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getActivity(
-                this,
-                0,
-                //task to do
-                Intent(this, MainActivity::class.java).also {
-                    //adding intent to directly go to tracking fragment
-                    it.action = Utils.ACTION_SHOW_TRACKING_FRAGMENT
-                },
-                FLAG_MUTABLE
-            )
-        } else {
-            PendingIntent.getActivity(
-                this,
-                0,
-                Intent(this, MainActivity::class.java).also {
-                    it.action = Utils.ACTION_SHOW_TRACKING_FRAGMENT
-                },
-                FLAG_UPDATE_CURRENT
-            )
-        }
+        return PendingIntent.getActivity(
+            this,
+            0,
+            //task to do
+            Intent(this, MainActivity::class.java).also {
+                it.action = Utils.ACTION_SHOW_TRACKING_FRAGMENT
+            },
+            FLAG_MUTABLE
+        )
     }
 
     private fun pauseService() {
