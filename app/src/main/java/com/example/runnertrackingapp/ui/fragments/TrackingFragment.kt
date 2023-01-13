@@ -11,6 +11,7 @@ import com.example.runnertrackingapp.R
 import com.example.runnertrackingapp.services.Polyline
 import com.example.runnertrackingapp.services.TrackingService
 import com.example.runnertrackingapp.ui.viewModels.MainViewModel
+import com.example.runnertrackingapp.utils.Utils
 import com.example.runnertrackingapp.utils.Utils.ACTION_PAUSE_SERVICE
 import com.example.runnertrackingapp.utils.Utils.ACTION_START_OR_RESUME_SERVICE
 import com.example.runnertrackingapp.utils.Utils.MAP_ZOOM
@@ -29,6 +30,7 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
     private var map :GoogleMap? = null
     private var isTracking= false
     private var pathPoints = mutableListOf<Polyline>()
+    private var curTimeInMillis = 0L
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +59,11 @@ class TrackingFragment : Fragment(R.layout.fragment_tracking) {
             pathPoints = it
             addLatestPolyline()
             moveCamera()
+        }
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner){
+            curTimeInMillis = it
+            val formattedTime = Utils.getFormattedStopWatchTime(curTimeInMillis,true)
+            tvTimer.text = formattedTime
         }
     }
     private fun toggleRun(){
