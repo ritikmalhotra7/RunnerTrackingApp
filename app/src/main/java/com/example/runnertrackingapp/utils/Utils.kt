@@ -46,6 +46,7 @@ object Utils {
         }
     }
 
+    //format millis into stop watch format
     fun getFormattedStopWatchTime(ms: Long, includeMillis: Boolean = false): String {
         var time = ms
         var hours = TimeUnit.MILLISECONDS.toHours(time).also { time -= TimeUnit.HOURS.toMillis(it) }

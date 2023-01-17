@@ -1,7 +1,7 @@
 package com.example.runnertrackingapp.ui.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.example.runnertrackingapp.repository.DefaultRepository
+import com.example.runnertrackingapp.db.repository.DefaultRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

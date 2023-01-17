@@ -1,7 +1,7 @@
-package com.example.runnertrackingapp.repository
+package com.example.runnertrackingapp.db.repository
 
 import com.example.runnertrackingapp.db.RunDao
-import com.example.runnertrackingapp.models.Run
+import com.example.runnertrackingapp.db.models.Run
 import javax.inject.Inject
 import javax.inject.Singleton
 
