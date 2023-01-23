@@ -1,4 +1,4 @@
-package com.example.runnertrackingapp.db
+package com.example.runnertrackingapp.db.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
@@ -8,5 +8,5 @@ import com.example.runnertrackingapp.db.models.Run
 @Database(entities = [Run::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class RunningDatabase: RoomDatabase(){
-    abstract fun getRunDao():RunDao
+    abstract fun getRunDao(): RunDao
 }

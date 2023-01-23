@@ -1,17 +1,20 @@
 package com.example.runnertrackingapp.ui.fragments
 
 import android.Manifest
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.runnertrackingapp.R
+import com.example.runnertrackingapp.adapter.RunAdapter
 import com.example.runnertrackingapp.ui.viewModels.MainViewModel
+import com.example.runnertrackingapp.utils.SortType
 import com.example.runnertrackingapp.utils.Utils.REQUEST_CODE_LOCATION_PERMISSION
 import com.example.runnertrackingapp.utils.Utils.hasLocationPermissions
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +25,9 @@ import pub.devrel.easypermissions.EasyPermissions
 @AndroidEntryPoint
 class RunFragment : Fragment(R.layout.fragment_run),EasyPermissions.PermissionCallbacks {
 
+    private lateinit var spinnerSelection: String
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var runAdapter: RunAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,7 +40,47 @@ class RunFragment : Fragment(R.layout.fragment_run),EasyPermissions.PermissionCa
             findNavController().navigate(R.id.action_runFragment_to_trackingFragment)
         }
         requestPermissions()
+        getData()
+        setViews()
+
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun getData() {
+        when(viewModel.sortType){
+            SortType.DATE -> spFilter.setSelection(0)
+            SortType.DISTANCE -> spFilter.setSelection(1)
+            SortType.AVG_SPEED -> spFilter.setSelection(2)
+            SortType.CALORIES_BURNED -> spFilter.setSelection(3)
+            SortType.RUNNING_TIME -> spFilter.setSelection(4)
+        }
+        viewModel.runs.observe(viewLifecycleOwner){
+            runAdapter.setList(it)
+        }
+    }
+
+    private fun setViews() {
+        //spinner
+        spFilter.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
+                when(pos){
+                    0-> viewModel.sortRuns(SortType.DATE)
+                    1->viewModel.sortRuns(SortType.DISTANCE)
+                    2->viewModel.sortRuns(SortType.AVG_SPEED)
+                    3->viewModel.sortRuns(SortType.CALORIES_BURNED)
+                    4->viewModel.sortRuns(SortType.RUNNING_TIME)
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+        }
+        //recyclerview
+        runAdapter = RunAdapter()
+        rvRuns.apply {
+            adapter = runAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
     }
 
     private fun requestPermissions() {

@@ -3,12 +3,17 @@ package com.example.runnertrackingapp.utils
 import android.Manifest
 import android.content.Context
 import android.graphics.Color
+import android.location.Location
 import android.os.Build
+import com.example.runnertrackingapp.services.Polyline
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.concurrent.TimeUnit
 
 object Utils {
     const val RUNNING_DATABASE_NAME = "running_db"
+    const val SHARED_PREFERENCES = "SHARED_PREFERENCES"
+    const val USERNAME_KEY = "USERNAME_KEY"
+    const val WEIGHT_KEY = "WEIGHT_KEY"
 
     const val REQUEST_CODE_LOCATION_PERMISSION = 100
 
@@ -20,6 +25,7 @@ object Utils {
     const val LOCATION_UPDATE_INTERVAL = 3000L
     const val FASTEST_LOCATION_INTERVAL = 1000L
     const val TIMER_UPDATE_INTERVAL = 50L
+    const val FIRST_TIME_TOGGLE_KEY = "FIRST_TIME_TOGGLE_KEY"
 
     const val POLYLINE_COLOR = Color.RED
     const val POLYLINE_WIDTH = 8f
@@ -44,6 +50,18 @@ object Utils {
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
             )
         }
+    }
+
+    fun calculatePolylineDistance(polyLine:Polyline):Float{
+        var distance = 0f
+        for(i in 0..polyLine.size-2){
+            val pos1 = polyLine[i]
+            val pos2 = polyLine[i+1]
+            val result = FloatArray(1)
+            Location.distanceBetween(pos1.latitude,pos1.longitude,pos2.latitude,pos2.longitude,result)
+            distance += result[0]
+        }
+        return distance
     }
 
     //format millis into stop watch format

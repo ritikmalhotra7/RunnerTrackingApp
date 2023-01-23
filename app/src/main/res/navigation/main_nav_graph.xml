@@ -19,7 +19,11 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.runnertrackingapp.ui.fragments.SettingsFragment"
-        android:label="SettingsFragment" />
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_runFragment"
+            app:destination="@id/runFragment" />
+    </fragment>
     <fragment
         android:id="@+id/setupFragment"
         android:name="com.example.runnertrackingapp.ui.fragments.SetupFragment"

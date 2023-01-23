@@ -1,4 +1,4 @@
-package com.example.runnertrackingapp.db
+package com.example.runnertrackingapp.db.local
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

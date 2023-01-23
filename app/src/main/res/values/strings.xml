@@ -5,9 +5,9 @@
     <string name="maps_key">AIzaSyAVhfZS8CVjhLQjfeW5nq4jAgrqaeuYbbw</string>
     <string-array name="filter_options">
         <item>Date</item>
-        <item>Running Time</item>
         <item>Distance</item>
         <item>Average Speed</item>
         <item>Calories Burned</item>
+        <item>Running Time</item>
     </string-array>
 </resources>

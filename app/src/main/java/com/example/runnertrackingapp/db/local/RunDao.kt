@@ -1,4 +1,4 @@
-package com.example.runnertrackingapp.db
+package com.example.runnertrackingapp.db.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
