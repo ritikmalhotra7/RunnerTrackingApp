@@ -20,7 +20,11 @@ class DialogFragment() : DialogFragment() {
         ).setTitle("Cancel Run?")
             .setMessage("Are you sure to cancel run and delete all its data?")
             .setIcon(R.drawable.icons8_delete_1)
-            .setPositiveButton("Yes") { _, _ -> yesListener }
+            .setPositiveButton("Yes") { _, _ ->
+                yesListener?.let{
+                    it()
+                }
+            }
             .setNegativeButton("No") { dialogInterface, _ -> dialogInterface.cancel() }
             .create()
         dialog?.show()
