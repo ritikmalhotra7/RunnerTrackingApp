@@ -33,6 +33,12 @@ class MainActivity : AppCompatActivity() {
         //if the app is launched by clicking on notification then intent must have an action
         navigateToTrackingFragment(intent)
 
+        /* if bottom_navigation_view.setupWithNavController(fragment.findNavController()) is not working then use this
+        val bottomNavigationView = binding.bottomNavigationView
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.activity_main_fcv) as NavHostFragment
+        val navController = navHostFragment.navController
+        bottomNavigationView.setupWithNavController(navController)*/
         bottom_navigation_view.setupWithNavController(fragment.findNavController())
         bottom_navigation_view.setOnItemReselectedListener {  }
         fragment.findNavController()
